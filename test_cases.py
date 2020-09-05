@@ -12,9 +12,9 @@ class AccountTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        self.database_name = "bank_testing"
+        self.database_name = "bank"
         self.database_path = "postgres://{}:{}@{}/{}".format(
-            'santarabantoosoo', 123, 'localhost:5432', self.database_name)
+            'ahgarawani', 6898, 'localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
         self.new_account = {
@@ -27,7 +27,15 @@ class AccountTestCase(unittest.TestCase):
         """Executed after each test"""
         pass
 
-    # TODO add tests for endpoints and errors.  
+    # TODO add tests for endpoints and errors.
+
+    def test_get_account_balance():
+        res = self.client().get('/accounts/1')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['balance'])
 
 
 # Make the tests conveniently executable

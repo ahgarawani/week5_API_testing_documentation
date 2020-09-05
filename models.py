@@ -5,7 +5,7 @@ import json
 
 database_name = "bank"
 database_path = "postgres://{}:{}@{}/{}".format(
-    'santarabantoosoo', 123, 'localhost:5432', database_name)
+    'ahgarawani', 6898, 'localhost:5432', database_name)
 
 db = SQLAlchemy()
 
