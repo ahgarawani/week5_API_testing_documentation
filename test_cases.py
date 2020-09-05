@@ -29,13 +29,21 @@ class AccountTestCase(unittest.TestCase):
 
     # TODO add tests for endpoints and errors.
 
-    def test_get_account_balance():
+    def test_get_account_balance(self):
         res = self.client().get('/accounts/1')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['balance'])
+    
+    def test_404_non_existent_account(self):
+        res = self.client().get('/accounts/1000000000')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'resource not found!')
 
 
 # Make the tests conveniently executable
