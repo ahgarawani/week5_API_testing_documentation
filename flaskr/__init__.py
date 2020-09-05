@@ -16,22 +16,45 @@ def create_app(test_config=None):
 
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
-        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers',
+                             'Content-Type,Authorization,true')
+        response.headers.add('Access-Control-Allow-Methods',
+                             'GET,PUT,POST,DELETE,OPTIONS')
         return response
 
     @app.route('/')
     def index():
+      return jsonify({
+        'success': True,
+        'message': 'Hello World'
+      })
+
+    
+    @app.route("/accounts/<int:account_id>")
+    def get_accounts(account_id):
+      try:
+        account = Account.query.get(account_id)
+
+        if account is None:
+          abort(404)
+        balance = account.format()["balance"]
         return jsonify({
-            'success': True,
-            'message': 'Hello World'
+          "success": True,
+          "balance": balance
         })
-
-
+      
+      except:
+        abort(404)
 
     # TODO Add routes using try/expect whenever applicable
 
-
-    # TODO Add Error handlers 
+    # TODO Add Error handlers
+    @app.errorhandler(404)
+    def not_found(error):
+      return jsonify({
+        "success": False,
+        "error": 404,
+        "message": "resource not found!"
+      }), 404
 
     return app
